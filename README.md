@@ -2,6 +2,8 @@
 
 My personal CV, based on `AltaCV, yet another LaTeX CV/Résumé class`.
 
+It's linked with overleaf to sync `.tex` files and has a github action listening to push events to build `cv.pdf` and push it to master. CD for your CV!
+
 ## Requirements and Compilation
 
 * pdflatex + biber + pdflatex
