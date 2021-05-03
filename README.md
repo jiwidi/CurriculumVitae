@@ -1,4 +1,5 @@
 # Curriculum Vitae
+[![Build LaTeX document](https://github.com/jiwidi/CurriculumVitae/actions/workflows/main.yml/badge.svg)](https://github.com/jiwidi/CurriculumVitae/actions/workflows/main.yml)
 
 My personal CV, based on `AltaCV, yet another LaTeX CV/Résumé class`.
 
