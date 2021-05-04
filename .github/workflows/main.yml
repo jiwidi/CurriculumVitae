@@ -13,6 +13,7 @@ jobs:
       - name: Compile LaTeX document
         uses: dante-ev/latex-action@latest
         with:
+          compiler: xelatex
           root_file: texfiles/JaimeFerrandoHuertas_CV.tex
 
       - name: Commit and Push
