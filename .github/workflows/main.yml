@@ -36,6 +36,8 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          ls .
+          ls texfiles
           cp textfiles/resume.pdf JaimeFerrandoHuertas_CV.pdf
           git add JaimeFerrandoHuertas_CV.pdf
           git commit -m "A robot updating Jaime's CV. Beep beep boop"
