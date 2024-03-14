@@ -1,23 +1,50 @@
 name: Build LaTeX document
-on:   # Triggers the workflow on push or pull request events but only for the master branch
+
+on:
   push:
-    branches: [ master ]
+    branches: [master]
   workflow_dispatch:
+
 jobs:
   build_latex:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v2
+
       - name: Compile LaTeX document
+        id: latex_build
         uses: dante-ev/latex-action@latest
         with:
-          root_file: texfiles/resume.tex
+          root_file: resume.tex
+          working_directory: texfiles
+          compiler: xelatex
+          args: "-interaction=nonstopmode"
+        continue-on-error: true
 
-      - name: Commit and Push
+      - name: Check if PDF exists
+        id: check_pdf
+        run: |
+          if [ -f "texfiles/resume.pdf" ]; then
+            echo "::set-output name=pdf_exists::true"
+          else
+            echo "::set-output name=pdf_exists::false"
+          fi
+
+      - name: Commit and Push if PDF exists
+        if: steps.check_pdf.outputs.pdf_exists == 'true'
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cp textfiles/resume.pdf JaimeFerrandoHuertas_CV.pdf
           git add JaimeFerrandoHuertas_CV.pdf
           git commit -m "A robot updating Jaime's CV. Beep beep boop"
           git push origin master --force
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fail if PDF does not exist
+        if: steps.check_pdf.outputs.pdf_exists == 'false'
+        run: |
+          echo "PDF file not found, failing the workflow."
+          exit 1
