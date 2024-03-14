@@ -14,12 +14,15 @@ jobs:
         with:
           root_file: resume.tex
           working_directory: texfiles
+          compiler: xelatex 
+          args: "-interaction=nonstopmode"
 
       - name: Commit and Push
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mv texfiles/JaimeFerrandoHuertas_CV.pdf .  # Ensure the PDF is moved back to the root if needed
           git add JaimeFerrandoHuertas_CV.pdf
           git commit -m "A robot updating Jaime's CV. Beep beep boop"
           git push origin master --force
-        working-directory: texfiles
+        working-directory: .
