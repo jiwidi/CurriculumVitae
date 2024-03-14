@@ -12,7 +12,8 @@ jobs:
       - name: Compile LaTeX document
         uses: dante-ev/latex-action@latest
         with:
-          root_file: texfiles/resume.tex
+          root_file: resume.tex
+          working_directory: texfiles
 
       - name: Commit and Push
         run: |
@@ -21,3 +22,4 @@ jobs:
           git add JaimeFerrandoHuertas_CV.pdf
           git commit -m "A robot updating Jaime's CV. Beep beep boop"
           git push origin master --force
+        working-directory: texfiles
