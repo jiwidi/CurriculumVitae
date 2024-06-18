@@ -12,8 +12,24 @@ jobs:
       - name: Set up Git repository
         uses: actions/checkout@v2
 
-      - name: Compile LaTeX document
-        id: latex_build
+      - name: Compile LaTeX document (1st run)
+        id: latex_build_first
+        uses: dante-ev/latex-action@latest
+        with:
+          root_file: resume.tex
+          working_directory: texfiles
+          compiler: xelatex
+          args: "-interaction=nonstopmode"
+        continue-on-error: true
+
+      - name: Run Biber
+        id: run_biber
+        run: |
+          cd texfiles
+          biber resume
+
+      - name: Compile LaTeX document (2nd run)
+        id: latex_build_second
         uses: dante-ev/latex-action@latest
         with:
           root_file: resume.tex
