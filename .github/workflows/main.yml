@@ -20,6 +20,8 @@ jobs:
           working_directory: texfiles
           compiler: xelatex
           args: "-interaction=nonstopmode"
+          # Pin to TL2023 — russell.cls has a tabular* height bug in TeX Live 2025
+          docker_image: texlive/texlive:TL2023-historic
         continue-on-error: true
 
       - name: Check if PDF exists
