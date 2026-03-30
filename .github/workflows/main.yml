@@ -8,29 +8,29 @@ on:
 jobs:
   build_latex:
     runs-on: ubuntu-latest
+    container:
+      image: texlive/texlive:TL2023-historic
     steps:
       - name: Set up Git repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Compile LaTeX document
         id: latex_build
-        uses: dante-ev/latex-action@latest
-        with:
-          root_file: resume.tex
-          working_directory: texfiles
-          compiler: xelatex
-          args: "-interaction=nonstopmode"
-          # Pin to TL2023 — russell.cls has a tabular* height bug in TeX Live 2025
-          docker_image: texlive/texlive:TL2023-historic
+        working-directory: texfiles
+        run: |
+          xelatex -interaction=nonstopmode resume.tex
+          biber resume
+          xelatex -interaction=nonstopmode resume.tex
+          xelatex -interaction=nonstopmode resume.tex
         continue-on-error: true
 
       - name: Check if PDF exists
         id: check_pdf
         run: |
           if [ -f "texfiles/resume.pdf" ]; then
-            echo "::set-output name=pdf_exists::true"
+            echo "pdf_exists=true" >> "$GITHUB_OUTPUT"
           else
-            echo "::set-output name=pdf_exists::false"
+            echo "pdf_exists=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Commit and Push if PDF exists
@@ -38,7 +38,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          ls .
+          git config --global --add safe.directory /__w/CurriculumVitae/CurriculumVitae
           cp texfiles/resume.pdf JaimeFerrandoHuertas_CV.pdf
           git add JaimeFerrandoHuertas_CV.pdf
           git commit -m "A robot updating Jaime's CV. Beep beep boop"
